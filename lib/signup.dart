@@ -250,7 +250,7 @@ class _signupState extends State<signup> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const dashboard()),
+                      MaterialPageRoute(builder: (context) => Dashboard()),
                     );
                   },
                   child: const Text(

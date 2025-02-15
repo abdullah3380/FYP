@@ -1,189 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/profile.dart';
+import 'cemrascreen.dart';
+import 'comunityscreen.dart';
+import 'diet plan screen.dart';
+import 'homescreen.dart';
 
-class dashboard extends StatelessWidget {
-  const dashboard({Key? key}) : super(key: key);
+class Dashboard extends StatefulWidget {
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    HomeScreen(),
+    DietPlanScreen(),
+    CommunityFeedScreen(),
+    ProfileScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calorie Meter'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: Icon(Icons.menu, color: Colors.black),
+        title: Text('Calorie Meter', style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        leading: const Icon(Icons.menu),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset('assets/logoIcon.png'),
-          ),
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/logo.png'),
+            ),
+          )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildCalorieCard(),
-            _buildNutrientsSection(),
-            _buildExerciseSection(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
-    );
-  }
+      body: _screens[_currentIndex], // Dynamically switching screens
 
-  Widget _buildCalorieCard() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Column(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Example: Open a new camera screen
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Camerascreen()));
+        },
+        child: Icon(Icons.camera_alt),
+        backgroundColor: Colors.lightGreen,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const SizedBox(height: 10),
-            const Text(
-              '30%',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+            IconButton(
+              icon: Image.asset(
+                "assets/home-icon.png",
+                width: 24,
+                height: 24,
+                color: _currentIndex == 0 ? Colors.green : Colors.black,
               ),
+              onPressed: () => _onItemTapped(0),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildGoalInfo(Icons.flag, 'Calorie Goal', '1896'),
-                _buildGoalInfo(Icons.local_fire_department, 'Burned', '896'),
-                _buildGoalInfo(Icons.restaurant, 'Consumed', '614'),
-              ],
+            IconButton(
+              icon: Image.asset(
+                "assets/plan.png",
+                width: 24,
+                height: 24,
+                color: _currentIndex == 1 ? Colors.green : Colors.black,
+              ),
+              onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(height: 10),
+            SizedBox(width: 40), // Space for floating button
+            IconButton(
+              icon: Image.asset(
+                "assets/community.png",
+                width: 24,
+                height: 24,
+                color: _currentIndex == 2 ? Colors.green : Colors.black,
+              ),
+              onPressed: () => _onItemTapped(2),
+            ),
+            IconButton(
+              icon:   Icon(Icons.person, color: _currentIndex == 0 ? Colors.green : Colors.black),
+              onPressed: () => _onItemTapped(3),
+            ),
           ],
         ),
       ),
-    );
-  }
 
-  Widget _buildGoalInfo(IconData icon, String label, String value) {
-    return Column(
-      children: [
-        Icon(icon, size: 30),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        Text(value, style: const TextStyle(fontSize: 14)),
-      ],
-    );
-  }
-
-  Widget _buildNutrientsSection() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              'Nutrients',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildNutrientInfo('Proteins', '70g'),
-                _buildNutrientInfo('Carbs', '70g'),
-                _buildNutrientInfo('Fats', '30g'),
-              ],
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNutrientInfo(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        Text(value, style: const TextStyle(fontSize: 14)),
-      ],
-    );
-  }
-
-  Widget _buildExerciseSection() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              'Exercise',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildExerciseInfo('Cardio', '30 mins', Icons.directions_run),
-                _buildExerciseInfo('Aerobic', '1 hour', Icons.self_improvement),
-              ],
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildExerciseInfo(String label, String duration, IconData icon) {
-    return Column(
-      children: [
-        Icon(icon, size: 30),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        Text(duration, style: const TextStyle(fontSize: 14)),
-      ],
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.fastfood),
-          label: 'Diet Plan',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.camera_alt),
-          label: 'Scan',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.group),
-          label: 'Community',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-      type: BottomNavigationBarType.fixed,
     );
   }
 }

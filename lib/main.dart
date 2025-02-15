@@ -1,3 +1,4 @@
+import 'package:untitled/dashboard.dart';
 import 'package:untitled/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         
       ),
-      home: SplashScreen(),
+      home: Dashboard(),
     );
   }
 }
